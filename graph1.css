@@ -1,0 +1,10 @@
+#chart1{
+    text-align: center;
+    
+}
+
+.bar{
+    fill: lightgreen;
+    stroke: green;
+    stroke-width: 1px;
+}
