@@ -8,26 +8,70 @@ const STUDENT_DATA = [
     { id: 6, name: 'Charlotte ', gender: 'F', age: 18, grade: 15}
 ]
 
+/* Extract Age Array  */
+const AGE_DATA = []
+for(var i=0;i<STUDENT_DATA.length;i++){
+    AGE_DATA.push(STUDENT_DATA[i].age);
+}
+
 /* Initial Dimensions */
 const CHART_WIDTH = 600;
-const CHART_HEIGHT = 200;
-const BAR_WIDTH = 40;
-const BAR_OFFSET = 5;
+const CHART_HEIGHT = 400;
+
+/* Parameters */
+const BAR_MARGIN = 5;
+
+/* Scales */
+let yScale = d3.scaleLinear()
+    .domain([0, d3.max(AGE_DATA)])
+    .range([0, CHART_HEIGHT]);
+let xScale = d3.scaleBand()
+    .domain(d3.range(0, AGE_DATA.length))
+    .range([0, CHART_WIDTH]);
+
 
 /* Graph Script */
-const chartContainer = d3.select('#chart1').append('svg')
+var chart1 = d3.select('#chart1');
+    chart1.append('svg')
+    // Set Chart Height, Width, Padding, and Background Colour
     .attr('width', CHART_WIDTH)
     .attr('height', CHART_HEIGHT)
-    .style('background','#f4f4f4');
+    .style('background','#f4f4f4')    
+    .style('padding','10px')
+    // Create Group for Bars
+    .append('g');
 
-const bars = chartContainer.append('g');
+// Create Tooltip
+var tooltip = d3.select('body').append('div').classed('tooltip', true);
 
-bars.selectAll('.bar').data(STUDENT_DATA).enter().append('rect').classed('bar', true)
-    .attr('width', BAR_WIDTH)
-    .attr('height', (d)=>{return CHART_HEIGHT - d.age})    
-    .attr('x', (data, i) => {
-        return (i * (BAR_WIDTH + BAR_OFFSET));
+// Create bars and link them to data
+var bars = chart1.select('svg g').selectAll('.bar').data(AGE_DATA).enter().append('rect').classed('bar', true)
+    // Assign bar sizes and positions dynamically
+    .attr('width', (d)=>{return xScale.bandwidth() - BAR_MARGIN})
+    .attr('height', (d)=>{return yScale(d)})    
+    .attr('x', (d, i) => {return xScale(i)})
+    .attr('y', (d) => {return (CHART_HEIGHT - yScale(d))})
+ 
+    // Tooltips Show on Mouse
+    .on('mouseover', function(e, d){
+        tooltip.html(d)
+        tooltip.style('opacity','1')
+            .style('left', e.pageX+'px')
+            .style('top', e.pageY+'px')
+        //Bar Opacity
+        d3.select(this).style('opacity', 0.5)
     })
-    .attr('y', (data) => {
-        return (CHART_HEIGHT - data.age);
-    });
+    .on('mouseout', function(e,d){
+        tooltip.html(d)
+        tooltip.style('opacity','0')
+            .style('left', e.pageX+'px')
+            .style('top', e.pageY+'px')
+
+        //Bar Opacity Revert
+        d3.select(this).style('opacity', 1)
+    })
+    ;
+    
+    
+    
+

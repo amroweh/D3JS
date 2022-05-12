@@ -8,3 +8,16 @@
     stroke: green;
     stroke-width: 1px;
 }
+
+.bar:hover{
+    cursor: pointer;
+}
+
+.tooltip{
+    position: absolute;
+    background-color: #f4f4f4;
+    border: 1px solid #606060;
+    padding: 4px 6px;
+    border-radius: 3px;
+    opacity: 0;
+}
