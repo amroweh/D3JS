@@ -1,6 +1,10 @@
 #chart1{
     text-align: center;
-    
+}
+
+#chart1 svg{
+    background-color: #f4f4f4;
+    padding: 10px;
 }
 
 .bar{
@@ -9,9 +13,6 @@
     stroke-width: 1px;
 }
 
-.bar:hover{
-    cursor: pointer;
-}
 
 .tooltip{
     position: absolute;
