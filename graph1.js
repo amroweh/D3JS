@@ -16,6 +16,8 @@ for(var i=0;i<STUDENT_DATA.length;i++){
 
 
 /* Parameters */
+const CHART_TITLE = 'This is the Title of the Graph!'
+const CHART_TITLE_HEIGHT = 40;
 const BAR_MARGIN = 5;
 const BARS_MARGIN = {
     top: 30,
@@ -27,8 +29,16 @@ const hTITLE_PADDING = 40
 const vTITLE_PADDING = 40
 
 /* Initial Chart Dimensions */
-const CHART_WIDTH = 600 - BARS_MARGIN.top - BARS_MARGIN.bottom;
-const CHART_HEIGHT = 400 - BARS_MARGIN.left - BARS_MARGIN.right;
+let CHART_HEIGHT = 400;
+let CHART_WIDTH = 600;
+if(screen.width > 600) {
+    CHART_WIDTH -= 20 - BARS_MARGIN.top - BARS_MARGIN.bottom;
+    CHART_HEIGHT -= BARS_MARGIN.left - BARS_MARGIN.right;
+}
+else{
+    CHART_WIDTH = screen.width - 20 - BARS_MARGIN.top - BARS_MARGIN.bottom;
+    CHART_HEIGHT -= BARS_MARGIN.left - BARS_MARGIN.right;
+}
 
 /* Scales */
 let yScale = d3.scaleLinear()
@@ -40,11 +50,21 @@ let xScale = d3.scaleBand()
 
 
 // Graph Script 
-var chart1 = d3.select('#chart1');
-    chart1.append('svg')
+var chart1 = d3.select('#chart1').style('position','relative');
+    
+// Add Chart Title
+chart1.append('span').classed('bar-title', true)
+    .html(CHART_TITLE)
+    .style('position','absolute')
+    .style('top', CHART_TITLE_HEIGHT / 2 +'px')
+    .style('left', (screen.width /2) + 'px')
+    .style('transform', 'translate(-50%)');
+
+chart1.append('svg')
     // Set Chart Height, Width, Padding, and Background Colour
     .attr('width', CHART_WIDTH + BARS_MARGIN.top + BARS_MARGIN.bottom)
     .attr('height', CHART_HEIGHT + BARS_MARGIN.left + BARS_MARGIN.right) 
+    .style('padding-top', CHART_TITLE_HEIGHT)
     // Create Group for Bars
     .append('g')
     // Move Bars Area to accommodate for axes
@@ -139,9 +159,7 @@ var hAxisTitle = d3.select('#chart1 svg')
 var vAxisTitle = d3.select('#chart1 svg')
     .append('text')
     .attr('x', 0)
-    .attr('y', CHART_HEIGHT / 2)
-    .attr('text-anchor','middle')
-    .attr('dominant-baseline', 'central')
-    .attr('transform','translate( -'+(CHART_WIDTH / 2)+','+(CHART_HEIGHT / 2)+') rotate(-90)')  //WTF?  
-    //.attr('transform', 'translate(-150,170) rotate(-90)')
+    .attr('y', 0)
+    .attr('text-anchor','middle')    
+    .attr('transform','translate( '+(15)+','+(CHART_HEIGHT / 2)+') rotate(-90)')  
     .html('Vertical Title');

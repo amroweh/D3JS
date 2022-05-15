@@ -1,5 +1,10 @@
 #chart1{
-    text-align: center;
+    text-align: center;    
+}
+
+#chart1 .bar-title{
+    font-size: 18px;
+    font-weight: bold;
 }
 
 #chart1 svg{
