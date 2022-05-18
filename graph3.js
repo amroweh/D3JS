@@ -2,31 +2,45 @@ const NETWORK_DATA = {
     'nodes' : [
         {
             'id' : 1,
-            'name' : "Ali"
+            'name' : "Ali",
+            'size': 5,
+            'color': 'red'
         },
         {
             'id' : 2,
-            'name' : "Mohammad"
+            'name' : "Mohammad",
+            'size': 8,
+            'color': 'blue'
         },
         {
             'id' : 3,
-            'name' : "Hala"
+            'name' : "Hala",
+            'size': 8,
+            'color': 'blue'
         },
         {
             'id' : 4,
-            'name' : "Ahmad"
+            'name' : "Ahmad",
+            'size': 8,
+            'color': 'blue'
         },
         {
             'id' : 5,
-            'name' : "Mawaheb"
+            'name' : "Mawaheb",
+            'size': 5,
+            'color': 'red'
         },
         {
             'id' : 6,
-            'name' : "Cyrine"
+            'name' : "Cyrine",
+            'size': 5,
+            'color': 'red'
         },
         {
             'id' : 7,
-            'name' : "Rami"
+            'name' : "Rami",
+            'size': 5,
+            'color': 'red'
         },
     ],
 
@@ -124,9 +138,17 @@ var node = network.select('svg').append('g').selectAll('circle')
 .data(DATA.nodes)
 .enter()
 .append('circle')
-.attr('r', 6)
-.attr('fill', 'blue')
+.attr('r', function(d){return d.size})
+.attr('fill', function(d){return d.color})
+
+//.append('filter').attr('id', (d)=>{return 'image-'+d.id}).attr('x','0%').attr('y','0%').attr('width','100%').attr('height','100%')
+//.attr('filter',(d)=>{return '#image-'+d.id})
+//.html('<feImage xlink:href = "my image.jpg"/>')
+
+
 .call(drag);
+
+
 
 // Update the function
 function ticked() {

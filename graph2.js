@@ -8,9 +8,11 @@ const CITY_DATA = [
     { city: 'Brazil', population: 3200}
 ]
 
-//Chart Dimensions
-const PIE_CHART_HEIGHT = 500
-const PIE_CHART_WIDTH = 500
+/* Initial Chart Dimensions */
+let PIE_CHART_HEIGHT = 400;
+let PIE_CHART_WIDTH = 400;
+if(screen.width < 400) PIE_CHART_WIDTH = screen.width;
+
 
 var pieChart = d3.select('#chart2');
 pieChart.style('display', 'flex')
@@ -25,12 +27,12 @@ pieChart.append('svg')
 var data = d3.pie().value((d)=>{return d.population})(CITY_DATA);
 var segments = d3.arc()
     .innerRadius(0)
-    .outerRadius(200)
+    .outerRadius(PIE_CHART_WIDTH/2 -20)
     .padAngle(0.05)
     .padRadius(50);
 
 var sections = pieChart.select('svg').append('g')
-    .attr('transform', 'translate(250,250)')
+    .attr('transform', 'translate('+(PIE_CHART_WIDTH/2 - 10)+','+(PIE_CHART_HEIGHT/2 - 10)+')')
     .selectAll('path').data(data);
 
 // Create color scale and get colors from D3JS color schemes
