@@ -2,9 +2,6 @@
     margin-top: 50px;
     text-align: center;
 }
-#chart2 svg{
-    background: #f6f6f6;    
-}
 
 .tooltip{
     position: absolute;

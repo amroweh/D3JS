@@ -1,0 +1,42 @@
+body{
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+h1, h2{
+    margin: 0;
+}
+
+.description{
+    background-color: #f6f6f6;
+    padding-top: 35px;
+    padding-bottom: 35px;
+}
+
+.description p{
+    font-size: 18px;
+}
+
+header{
+    margin: 0;
+    padding: 15px 10px;
+    text-align: center;
+    font-size: 16px;
+    background-color: rgb(65, 65, 143);
+    color: white;
+    
+}
+
+.container{
+    padding-left: 5px;
+    padding-right: 5px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 600px) {
+    .container{
+        padding-left: 15px;
+        padding-right: 15px;        
+    }
+    
+}

@@ -1,11 +1,11 @@
 // Dummy Data 
 const CITY_DATA = [
-    { city: 'Sheffield', population: 60000},
-    { city: 'London', population: 250000},
-    { city: 'Manchester', population: 80000},
-    { city: 'York', population: 30000},
-    { city: 'Edinburgh', population: 150000},
-    { city: 'Liverpool', population: 70000}
+    { city: 'Africa', population: 6000},
+    { city: 'France', population: 25000},
+    { city: 'UAE', population: 8000},
+    { city: 'Saudi Arabia', population: 3000},
+    { city: 'Qatar', population: 15000},
+    { city: 'Brazil', population: 3200}
 ]
 
 //Chart Dimensions
@@ -80,7 +80,7 @@ let content = pieChart.select('g').selectAll('text').data(data).enter().append('
 
 // Right Legend
 pieChart.append('div').classed('pie-label-area', true)
-    .style('background-color','#f6f6f6')
+    //.style('background-color','#f6f6f6')
     .style('padding', '15px')
     .selectAll('.label')
         .style('display','flex')        

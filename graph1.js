@@ -1,23 +1,24 @@
 /* Dummy Data */
-const STUDENT_DATA = [
-    { id: 1, name: 'Ali', gender: 'M', age: 31, grade: 14},
-    { id: 2, name: 'Wendy', gender: 'F', age: 47, grade: 18},
-    { id: 3, name: 'Deep', gender: 'M', age: 33, grade: 19},
-    { id: 4, name: 'Marty', gender: 'M', age: 55, grade: 12},
-    { id: 5, name: 'Jonah', gender: 'M', age: 56, grade: 16},
-    { id: 6, name: 'Charlotte ', gender: 'F', age: 18, grade: 15}
+const IMMIGRANT_DATA = [
+    
+    { id: 2, name: 'Wendy', gender: 'F', age: 4.493, grade: 18},
+    { id: 3, name: 'Deep', gender: 'M', age: 8.508, grade: 19},
+    { id: 4, name: 'Marty', gender: 'M', age: 12.523, grade: 12},
+    { id: 5, name: 'Jonah', gender: 'M', age: 16.538, grade: 16},
+    { id: 6, name: 'Charlotte ', gender: 'F', age: 20.553, grade: 15}
 ]
 
 /* Extract Age Array  */
 const AGE_DATA = []
-for(var i=0;i<STUDENT_DATA.length;i++){
-    AGE_DATA.push(STUDENT_DATA[i].age);
+for(var i=0;i<IMMIGRANT_DATA.length;i++){
+    AGE_DATA.push(IMMIGRANT_DATA[i].age);
 }
 
 
 /* Parameters */
-const CHART_TITLE = 'This is the Title of the Graph!'
+const CHART_TITLE = 'Yearly Immigration Rates in Lebanon, 2018 - 2022'
 const CHART_TITLE_HEIGHT = 40;
+const CHART_TITLE_FONT_SIZE = 18;
 const BAR_MARGIN = 5;
 const BARS_MARGIN = {
     top: 30,
@@ -52,24 +53,27 @@ let xScale = d3.scaleBand()
 // Graph Script 
 var chart1 = d3.select('#chart1').style('position','relative');
     
-// Add Chart Title
-chart1.append('span').classed('bar-title', true)
-    .html(CHART_TITLE)
-    .style('position','absolute')
-    .style('top', CHART_TITLE_HEIGHT / 2 +'px')
-    .style('left', (screen.width /2) + 'px')
-    .style('transform', 'translate(-50%)');
 
 chart1.append('svg')
     // Set Chart Height, Width, Padding, and Background Colour
     .attr('width', CHART_WIDTH + BARS_MARGIN.top + BARS_MARGIN.bottom)
-    .attr('height', CHART_HEIGHT + BARS_MARGIN.left + BARS_MARGIN.right) 
+    .attr('height', CHART_HEIGHT + BARS_MARGIN.left + BARS_MARGIN.right + CHART_TITLE_HEIGHT) 
     .style('padding-top', CHART_TITLE_HEIGHT)
+
     // Create Group for Bars
     .append('g')
     // Move Bars Area to accommodate for axes
     .attr('transform', 'translate('+BARS_MARGIN.left+','+BARS_MARGIN.top+')')
     ;
+
+// Add Main Title
+    chart1.select('svg')
+    .append('text')
+    .attr('x', CHART_WIDTH / 2)
+    .attr('y', CHART_TITLE_HEIGHT/2 )    
+    .style('font-size', CHART_TITLE_FONT_SIZE)
+    .style('text-anchor', 'middle')
+    .html(CHART_TITLE);
 
 // Create Tooltip
 var tooltip = d3.select('body').append('div').classed('tooltip', true);
@@ -104,15 +108,15 @@ var bars = chart1.select('svg g').selectAll('.bar').data(AGE_DATA).enter().appen
     
 // Graph Transition
 bars.transition()
-    .attr('height', (d)=>{return yScale(d)})
-    .attr('y', (d)=>{return (CHART_HEIGHT - yScale(d))})
+    .attr('height', (d)=>{return yScale(d) - CHART_TITLE_HEIGHT})
+    .attr('y', (d)=>{return (CHART_HEIGHT + CHART_TITLE_HEIGHT - yScale(d))})
     
 // Graph Axes Scales
 let vScale = d3.scaleLinear()
     .domain([0, d3.max(AGE_DATA)])
     .range([CHART_HEIGHT,0]);
 let hScale = d3.scaleBand()
-    .domain(d3.range(0, AGE_DATA.length))
+    .domain(d3.range(2018, 2018+AGE_DATA.length))
     .range([0, CHART_WIDTH]);
 
 // Graph Axes
@@ -153,7 +157,7 @@ var hAxisTitle = d3.select('#chart1 svg')
     .append('text')
     .attr('x', CHART_WIDTH / 2)
     .attr('y', CHART_HEIGHT + BARS_MARGIN.top + hTITLE_PADDING)    
-    .html('Horizontal Title');
+    .html('Year');
 
 // vAxis Title
 var vAxisTitle = d3.select('#chart1 svg')
@@ -162,4 +166,4 @@ var vAxisTitle = d3.select('#chart1 svg')
     .attr('y', 0)
     .attr('text-anchor','middle')    
     .attr('transform','translate( '+(15)+','+(CHART_HEIGHT / 2)+') rotate(-90)')  
-    .html('Vertical Title');
+    .html('Immigration Rates (/1000 of population)');

@@ -91,40 +91,10 @@ var network = d3.select('#chart3');
 
 network.append('svg')
     .attr('width', NETWORK_WIDTH + NETWORK_MARGINS.left + NETWORK_MARGINS.right)
-    .attr('height', NETWORK_HEIGHT + NETWORK_MARGINS.top + NETWORK_MARGINS.bottom)
-    .append('g')
-        .attr('transform', 'translate('+NETWORK_MARGINS.left+','+NETWORK_MARGINS.top+')');
+    .attr('height', NETWORK_HEIGHT + NETWORK_MARGINS.top + NETWORK_MARGINS.bottom);
 
 
 var DATA = NETWORK_DATA;        
-
-// Initialize Links
-var link = network.select('svg g').selectAll('line')
-.data(DATA.links)
-.enter()
-.append('line')
-    .style('stroke', 'red')
-
-// Initialize Nodes
-var node = network.select('svg g').selectAll('circle')
-.data(DATA.nodes)
-.enter()
-.append('circle')
-    .attr('r', 6)
-    .style('fill', 'blue')
-    .style('transform-box', 'fill-box')
-    .style('transform', 'translate(-50%,+50%)')
-        // .enter()
-        // .append('circle')
-        // .each(
-        //     function(d){
-        //         d3.select(this)
-        //             .attr('fill', 'purple')
-        //             .attr('r', 5)
-        //     }
-        // )
-            
-    
 
 // Let's list the force we wanna apply on the network
 var simulation = d3.forceSimulation(DATA.nodes)                 // Force algorithm is applied to data.nodes
@@ -132,9 +102,31 @@ var simulation = d3.forceSimulation(DATA.nodes)                 // Force algorit
     .id(function(d) { return d.id; })                     // This provide  the id of a node
     .links(DATA.links)                                    // and this the list of links
 )
-.force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+.force("charge", d3.forceManyBody().strength(-1500))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
 .force("center", d3.forceCenter(NETWORK_WIDTH / 4, NETWORK_HEIGHT / 4))     // This force attracts nodes to the center of the svg area
-.on("end", ticked);
+.on("tick", ticked);
+
+// Initialize Links
+var link = network.select('svg').append('g').selectAll('line')
+.data(DATA.links)
+.enter()
+.append('line')
+    .style('stroke', 'red');
+    
+//Add drag force
+var drag = d3.drag()
+    .on('start', dragstarted)
+    .on('drag', dragged)
+    .on('end', dragended)
+
+// Initialize Nodes
+var node = network.select('svg').append('g').selectAll('circle')
+.data(DATA.nodes)
+.enter()
+.append('circle')
+.attr('r', 6)
+.attr('fill', 'blue')
+.call(drag);
 
 // Update the function
 function ticked() {
@@ -145,6 +137,22 @@ function ticked() {
         .attr("y2", function(d) { return d.target.y; });
 
     node
-        .attr("cx", function (d) { return d.x+6; })
-        .attr("cy", function(d) { return d.y-6; });
+        .attr("cx", function (d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+}
+
+// Drag Functions
+function dragstarted(e, d){    
+    if(!e.active) simulation.alphaTarget(.03).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+}
+function dragged(e, d){
+    d.fx = e.x;
+    d.fy = e.y;
+}
+function dragended(e, d){
+    if(!e.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
 }
